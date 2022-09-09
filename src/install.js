@@ -46,7 +46,7 @@ async function getVersion() {
   let version = core.getInput("version");
 
   // If version is specified, let's prepend a "v" to it
-  if (version && version[0] !== "v") {
+  if (version && version !== "latest" && version[0] !== "v") {
     version = `v${version}`;
   }
 
