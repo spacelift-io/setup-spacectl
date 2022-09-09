@@ -1,15 +1,21 @@
-const core = require("@actions/core");
-const tc = require("@actions/tool-cache");
-const os = require("os");
-const { Octokit } = require("@octokit/action");
-const path = require("path");
+import * as core from "@actions/core";
+import * as tc from "@actions/tool-cache";
+import { Octokit } from "@octokit/action";
+import os from "os";
+import path from "path";
 
 const octokit = new Octokit();
 const downloadURL = "https://github.com/spacelift-io/spacectl/releases/download";
 
-async function getBinaryFromCacheOrDownload() {
+/**
+ * Downloads the Spacectl binary from GitHub.
+ * It also caches it, so that subsequent runs of the action can use the cached version.
+ * @returns The path of the extracted binary.
+ */
+export async function installAndGetFolder(): Promise<string> {
   const version = await getVersion();
   const arch = getArchitecture();
+  core.setOutput("version", version);
 
   const cached = tc.find("spacectl", version, arch);
   if (cached) {
@@ -24,25 +30,39 @@ async function getBinaryFromCacheOrDownload() {
   const extractedFolder = await tc.extractZip(zipPath, path.join(os.homedir(), "spacectl"));
   core.info(`Extracted Spacectl to ${extractedFolder}`);
 
-  await cacheFolder(extractedFolder, version, arch);
+  await saveToCache(extractedFolder, version, arch);
 
   return extractedFolder;
 }
 
-async function cacheFolder(extractedFolder, version, arch) {
+/**
+ * Saves the extracted binary's parent folder to the cache.
+ */
+async function saveToCache(extractedFolder: string, version: string, arch: string): Promise<void> {
   const cachedPath = await tc.cacheDir(extractedFolder, "spacectl", version, arch);
 
   core.info(`Cached Spacectl to ${cachedPath}`);
 }
 
-async function getAssetURL(version, arch) {
+/**
+ * Returns the URL of the Spacectl zip file for the given version and architecture.
+ * @returns The URL of the Spacectl zip file.
+ * @example "https://github.com/spacelift-io/spacectl/releases/download/v0.12.0/spacectl_0.12.0_linux_arm64.zip"
+ */
+async function getAssetURL(version: string, arch: string): Promise<string> {
   const versionWithoutLeadingV = version.substring(1);
   const platform = getPlatform();
 
   return `${downloadURL}/${version}/spacectl_${versionWithoutLeadingV}_${platform}_${arch}.zip`;
 }
 
-async function getVersion() {
+/**
+ * Determines the version of Spacectl to download.
+ * If the user didn't explicitly provide any, we'll use the latest version.
+ * @returns The version of Spacectl to download.
+ * @example "v0.1.0"
+ */
+async function getVersion(): Promise<string> {
   let version = core.getInput("version");
 
   // If version is specified, let's prepend a "v" to it
@@ -60,7 +80,13 @@ async function getVersion() {
   return version;
 }
 
-async function getLatestVersion() {
+/**
+ * Gets the latest version of Spacectl from GitHub.
+ * We filter out drafts and pre-releases.
+ * @returns The latest version of Spacectl with a "v" prefix.
+ * @example "v0.1.0"
+ */
+async function getLatestVersion(): Promise<string> {
   const releaseResponse = await octokit.repos.listReleases({
     owner: "spacelift-io",
     repo: "spacectl",
@@ -73,12 +99,18 @@ async function getLatestVersion() {
     throw new Error(errMsg);
   }
 
-  return releaseList[0].tag_name;
+  const filteredReleases = releaseList.filter((release) => !release.draft && !release.prerelease);
+
+  return filteredReleases[0].tag_name;
 }
 
-// Copy-pasta of:
-// https://github.com/actions/setup-go/blob/30b9ddff1180797dbf0efc06837929f98bdf7af7/src/system.ts
-function getPlatform() {
+/**
+ * Copy-pasta of:
+ * https://github.com/actions/setup-go/blob/30b9ddff1180797dbf0efc06837929f98bdf7af7/src/system.ts
+ * @returns The platform name.
+ * @example "linux"
+ */
+function getPlatform(): string {
   let platform = os.platform().toString();
 
   if (platform === "win32") {
@@ -88,9 +120,13 @@ function getPlatform() {
   return platform;
 }
 
-// Copy-pasta of:
-// https://github.com/actions/setup-go/blob/30b9ddff1180797dbf0efc06837929f98bdf7af7/src/system.ts
-function getArchitecture() {
+/**
+ * Copy-pasta of:
+ * https://github.com/actions/setup-go/blob/30b9ddff1180797dbf0efc06837929f98bdf7af7/src/system.ts
+ * @returns The architecture name.
+ * @example "amd64"
+ */
+function getArchitecture(): string {
   let arch = os.arch();
 
   switch (arch) {
@@ -107,5 +143,3 @@ function getArchitecture() {
 
   return arch;
 }
-
-module.exports = getBinaryFromCacheOrDownload;
