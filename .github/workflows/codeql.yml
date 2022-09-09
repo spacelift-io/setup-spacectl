@@ -1,4 +1,4 @@
-name: check dist
+name: codeql
 
 on:
   pull_request:
@@ -10,18 +10,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check-dist:
-    name: 📦 Check dist
+  codeql:
+    name: 🔍 Code quality
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Install packages
-        run: npm ci
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@main
 
-      - name: Check if TypeScript is compiled
-        run: |
-          npm run build
-          git diff --name-only --exit-code dist/
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@main

@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   build:
+    name: 👷 Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -19,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@main
 
       - name: Install packages
         run: npm ci

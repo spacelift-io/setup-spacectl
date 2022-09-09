@@ -14633,120 +14633,230 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 1430:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ 6144:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
-const core = __nccwpck_require__(2186);
-const tc = __nccwpck_require__(7784);
-const os = __nccwpck_require__(2037);
-const { Octokit } = __nccwpck_require__(1231);
-const path = __nccwpck_require__(1017);
+"use strict";
 
-const octokit = new Octokit();
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(2186));
+const install_1 = __nccwpck_require__(1649);
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let binaryFolder = yield (0, install_1.installAndGetFolder)();
+        core.addPath(binaryFolder);
+        core.info("Added spacectl to PATH: " + binaryFolder);
+    });
+}
+run();
+
+
+/***/ }),
+
+/***/ 1649:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.installAndGetFolder = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const tc = __importStar(__nccwpck_require__(7784));
+const action_1 = __nccwpck_require__(1231);
+const os_1 = __importDefault(__nccwpck_require__(2037));
+const path_1 = __importDefault(__nccwpck_require__(1017));
+const octokit = new action_1.Octokit();
 const downloadURL = "https://github.com/spacelift-io/spacectl/releases/download";
-
-async function getBinaryFromCacheOrDownload() {
-  const version = await getVersion();
-  const arch = getArchitecture();
-
-  const cached = tc.find("spacectl", version, arch);
-  if (cached) {
-    core.info(`Found cached Spacectl at ${cached}`);
-    return cached;
-  }
-
-  const assetURL = await getAssetURL(version, arch);
-  core.info(`Downloading Spacectl from ${assetURL}`);
-
-  const zipPath = await tc.downloadTool(assetURL);
-  const extractedFolder = await tc.extractZip(zipPath, path.join(os.homedir(), "spacectl"));
-  core.info(`Extracted Spacectl to ${extractedFolder}`);
-
-  await cacheFolder(extractedFolder, version, arch);
-
-  return extractedFolder;
+/**
+ * Downloads the Spacectl binary from GitHub.
+ * It also caches it, so that subsequent runs of the action can use the cached version.
+ * @returns The path of the extracted binary.
+ */
+function installAndGetFolder() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const version = yield getVersion();
+        const arch = getArchitecture();
+        core.setOutput("version", version);
+        const cached = tc.find("spacectl", version, arch);
+        if (cached) {
+            core.info(`Found cached Spacectl at ${cached}`);
+            return cached;
+        }
+        const assetURL = yield getAssetURL(version, arch);
+        core.info(`Downloading Spacectl from ${assetURL}`);
+        const zipPath = yield tc.downloadTool(assetURL);
+        const extractedFolder = yield tc.extractZip(zipPath, path_1.default.join(os_1.default.homedir(), "spacectl"));
+        core.info(`Extracted Spacectl to ${extractedFolder}`);
+        yield saveToCache(extractedFolder, version, arch);
+        return extractedFolder;
+    });
 }
-
-async function cacheFolder(extractedFolder, version, arch) {
-  const cachedPath = await tc.cacheDir(extractedFolder, "spacectl", version, arch);
-
-  core.info(`Cached Spacectl to ${cachedPath}`);
+exports.installAndGetFolder = installAndGetFolder;
+/**
+ * Saves the extracted binary's parent folder to the cache.
+ */
+function saveToCache(extractedFolder, version, arch) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const cachedPath = yield tc.cacheDir(extractedFolder, "spacectl", version, arch);
+        core.info(`Cached Spacectl to ${cachedPath}`);
+    });
 }
-
-async function getAssetURL(version, arch) {
-  const versionWithoutLeadingV = version.substring(1);
-  const platform = getPlatform();
-
-  return `${downloadURL}/${version}/spacectl_${versionWithoutLeadingV}_${platform}_${arch}.zip`;
+/**
+ * Returns the URL of the Spacectl zip file for the given version and architecture.
+ * @returns The URL of the Spacectl zip file.
+ * @example "https://github.com/spacelift-io/spacectl/releases/download/v0.12.0/spacectl_0.12.0_linux_arm64.zip"
+ */
+function getAssetURL(version, arch) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const versionWithoutLeadingV = version.substring(1);
+        const platform = getPlatform();
+        return `${downloadURL}/${version}/spacectl_${versionWithoutLeadingV}_${platform}_${arch}.zip`;
+    });
 }
-
-async function getVersion() {
-  let version = core.getInput("version");
-
-  // If version is specified, let's prepend a "v" to it
-  if (version && version !== "latest" && version[0] !== "v") {
-    version = `v${version}`;
-  }
-
-  // If version is not specified, we default to the latest
-  if (!version || version === "latest") {
-    version = await getLatestVersion();
-  }
-
-  core.info(`Installing version ${version} of Spacectl`);
-
-  return version;
+/**
+ * Determines the version of Spacectl to download.
+ * If the user didn't explicitly provide any, we'll use the latest version.
+ * @returns The version of Spacectl to download.
+ * @example "v0.1.0"
+ */
+function getVersion() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let version = core.getInput("version");
+        // If version is specified, let's prepend a "v" to it
+        if (version && version !== "latest" && version[0] !== "v") {
+            version = `v${version}`;
+        }
+        // If version is not specified, we default to the latest
+        if (!version || version === "latest") {
+            version = yield getLatestVersion();
+        }
+        core.info(`Installing version ${version} of Spacectl`);
+        return version;
+    });
 }
-
-async function getLatestVersion() {
-  const releaseResponse = await octokit.repos.listReleases({
-    owner: "spacelift-io",
-    repo: "spacectl",
-  });
-  const releaseList = releaseResponse.data;
-
-  if (!releaseList) {
-    const errMsg = "Could not find any releases for Spacectl";
-    core.setFailed(errMsg);
-    throw new Error(errMsg);
-  }
-
-  return releaseList[0].tag_name;
+/**
+ * Gets the latest version of Spacectl from GitHub.
+ * We filter out drafts and pre-releases.
+ * @returns The latest version of Spacectl with a "v" prefix.
+ * @example "v0.1.0"
+ */
+function getLatestVersion() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const releaseResponse = yield octokit.repos.listReleases({
+            owner: "spacelift-io",
+            repo: "spacectl",
+        });
+        const releaseList = releaseResponse.data;
+        if (!releaseList) {
+            const errMsg = "Could not find any releases for Spacectl";
+            core.setFailed(errMsg);
+            throw new Error(errMsg);
+        }
+        const filteredReleases = releaseList.filter((release) => !release.draft && !release.prerelease);
+        return filteredReleases[0].tag_name;
+    });
 }
-
-// Copy-pasta of:
-// https://github.com/actions/setup-go/blob/30b9ddff1180797dbf0efc06837929f98bdf7af7/src/system.ts
+/**
+ * Copy-pasta of:
+ * https://github.com/actions/setup-go/blob/30b9ddff1180797dbf0efc06837929f98bdf7af7/src/system.ts
+ * @returns The platform name.
+ * @example "linux"
+ */
 function getPlatform() {
-  let platform = os.platform().toString();
-
-  if (platform === "win32") {
-    platform = "windows";
-  }
-
-  return platform;
+    let platform = os_1.default.platform().toString();
+    if (platform === "win32") {
+        platform = "windows";
+    }
+    return platform;
 }
-
-// Copy-pasta of:
-// https://github.com/actions/setup-go/blob/30b9ddff1180797dbf0efc06837929f98bdf7af7/src/system.ts
+/**
+ * Copy-pasta of:
+ * https://github.com/actions/setup-go/blob/30b9ddff1180797dbf0efc06837929f98bdf7af7/src/system.ts
+ * @returns The architecture name.
+ * @example "amd64"
+ */
 function getArchitecture() {
-  let arch = os.arch();
-
-  switch (arch) {
-    case "x64":
-      arch = "amd64";
-      break;
-    case "x32":
-      arch = "386";
-      break;
-    case "arm":
-      arch = "armv6l";
-      break;
-  }
-
-  return arch;
+    let arch = os_1.default.arch();
+    switch (arch) {
+        case "x64":
+            arch = "amd64";
+            break;
+        case "x32":
+            arch = "386";
+            break;
+        case "arm":
+            arch = "armv6l";
+            break;
+    }
+    return arch;
 }
-
-module.exports = getBinaryFromCacheOrDownload;
 
 
 /***/ }),
@@ -14965,23 +15075,12 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-const core = __nccwpck_require__(2186);
-const getBinaryFromCacheOrDownload = __nccwpck_require__(1430);
-
-async function run() {
-  let binaryFolder = await getBinaryFromCacheOrDownload();
-  core.addPath(binaryFolder);
-
-  core.info("Added spacectl to PATH: " + binaryFolder);
-}
-
-run();
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6144);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
