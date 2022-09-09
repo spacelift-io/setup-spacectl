@@ -79,13 +79,13 @@ async function getLatestVersion() {
 // Copy-pasta of:
 // https://github.com/actions/setup-go/blob/30b9ddff1180797dbf0efc06837929f98bdf7af7/src/system.ts
 function getPlatform() {
-  let plat = os.platform().toString();
+  let platform = os.platform().toString();
 
-  if (plat === "win32") {
-    plat = "windows";
+  if (platform === "win32") {
+    platform = "windows";
   }
 
-  return plat;
+  return platform;
 }
 
 // Copy-pasta of:

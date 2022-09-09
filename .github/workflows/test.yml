@@ -1,9 +1,6 @@
 name: build
 
 on:
-  push:
-    paths-ignore:
-      - "**.md"
   pull_request:
     paths-ignore:
       - "**.md"
