@@ -1,0 +1,14 @@
+name: Setup Spacectl
+author: Spacelift
+description: |
+  This action installs the Spacectl CLI tool and
+  add it to the PATH.
+
+inputs:
+  version:
+    description: The version of Spacectl to install
+    default: latest
+
+runs:
+  using: node16
+  main: dist/index.js

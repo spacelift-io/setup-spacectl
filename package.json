@@ -1,0 +1,35 @@
+{
+  "name": "setup-spacectl",
+  "version": "0.0.1",
+  "description": "GitHub Action to install spacectl",
+  "main": "src/index.js",
+  "scripts": {
+    "format": "prettier --write src/*.js",
+    "format:check": "prettier --check 'src/**/*.js'",
+    "build": "ncc build src/index.js -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spacelift-io/setup-spacectl.git"
+  },
+  "keywords": [
+    "spacectl",
+    "github",
+    "action"
+  ],
+  "author": "Spacelift, Inc.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spacelift-io/setup-spacectl/issues"
+  },
+  "homepage": "https://github.com/spacelift-io/setup-spacectl#readme",
+  "dependencies": {
+    "@actions/core": "^1.9.1",
+    "@actions/tool-cache": "^2.0.1",
+    "@octokit/action": "^4.0.8"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.34.0",
+    "prettier": "^2.7.1"
+  }
+}
