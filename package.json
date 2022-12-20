@@ -6,6 +6,7 @@
   "scripts": {
     "format": "prettier --write src/*.ts",
     "format:check": "prettier --check 'src/**/*.ts'",
+    "lint": "eslint src/*.ts",
     "build": "ncc build src/index.ts -o dist"
   },
   "repository": {
@@ -24,14 +25,14 @@
   },
   "homepage": "https://github.com/spacelift-io/setup-spacectl#readme",
   "dependencies": {
-    "@actions/core": "^1.9.1",
+    "@actions/core": "^1.10.0",
     "@actions/tool-cache": "^2.0.1",
-    "@octokit/action": "^4.0.8"
+    "@octokit/action": "^4.0.10"
   },
   "devDependencies": {
-    "@types/node": "^18.7.16",
-    "@vercel/ncc": "^0.34.0",
-    "prettier": "^2.7.1",
-    "typescript": "^4.8.3"
+    "@types/node": "^18.11.17",
+    "@vercel/ncc": "^0.36.0",
+    "prettier": "^2.8.1",
+    "typescript": "^4.9.4"
   }
 }
