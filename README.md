@@ -32,7 +32,7 @@ steps:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
-      version: v0.12.0
+      version: v0.18.0
 ```
 
 ### Inputs
