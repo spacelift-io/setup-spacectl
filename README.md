@@ -17,7 +17,7 @@ steps:
 
   - name: Deploy infrastructure
     env:
-      SPACELIFT_API_ENDPOINT: https://mycorp.app.spacelift.io
+      SPACELIFT_API_KEY_ENDPOINT: https://mycorp.app.spacelift.io
       SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
       SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
     run: spacectl stack deploy --id my-infra-stack
