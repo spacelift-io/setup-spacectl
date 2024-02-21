@@ -27,8 +27,8 @@
   "homepage": "https://github.com/spacelift-io/setup-spacectl#readme",
   "dependencies": {
     "@actions/core": "^1.0",
-    "@actions/tool-cache": "^2.0",
-    "@octokit/action": "^6.0"
+    "@actions/github": "^6.0.0",
+    "@actions/tool-cache": "^2.0"
   },
   "devDependencies": {
     "@types/node": "^20.0",
