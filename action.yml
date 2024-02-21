@@ -8,6 +8,10 @@ inputs:
   version:
     description: The version of Spacectl to install. Defaults to latest.
     default: latest
+  github-token:
+    description: GitHub token to use for querying the GitHub API.
+    required: false
+    default: ${{ github.token }}
 
 runs:
   using: node20

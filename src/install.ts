@@ -1,10 +1,10 @@
 import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
-import { Octokit } from "@octokit/action";
+import * as github from "@actions/github";
 import os from "os";
 import path from "path";
 
-const octokit = new Octokit();
+const octokit = github.getOctokit(core.getInput("github-token"));
 const downloadURL = "https://github.com/spacelift-io/spacectl/releases/download";
 
 /**
@@ -87,7 +87,7 @@ async function getVersion(): Promise<string> {
  * @example "v0.1.0"
  */
 async function getLatestVersion(): Promise<string> {
-  const releaseResponse = await octokit.repos.listReleases({
+  const releaseResponse = await octokit.rest.repos.listReleases({
     owner: "spacelift-io",
     repo: "spacectl",
   });

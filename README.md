@@ -6,14 +6,12 @@ This is a simple GitHub Action to install [spacectl](https://github.com/spacelif
 
 ## ✨ Usage
 
-`GITHUB_TOKEN` environment variable is a **must** because we're using it internally to list all releases of `spacectl` to find the latest one.
+Note that the action queries the GitHub API to list the available releases of `spacectl` so it needs a GitHub token. By default it uses `${{ github.token }}` but you can override it by setting the `github-token` input.
 
 ```yaml
 steps:
   - name: Install spacectl
-    uses: spacelift-io/setup-spacectl@main
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: spacelift-io/setup-spacectl@v1
 
   - name: Deploy infrastructure
     env:
@@ -28,18 +26,17 @@ You can optionally provide a specific version:
 ```yaml
 steps:
   - name: Install spacectl
-    uses: spacelift-io/setup-spacectl@main
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: spacelift-io/setup-spacectl@v1
     with:
       version: v0.18.0
 ```
 
 ### Inputs
 
-| Name      | Description                                                                                                   | Default  |
-| --------- | ------------------------------------------------------------------------------------------------------------- | -------- |
-| `version` | Which version of `spacectl` to install. If not specified, the latest version will be installed (recommended). | `latest` |
+| Name           | Description                                                                                                   | Default               |
+| -------------- | ------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `version`      | Which version of `spacectl` to install. If not specified, the latest version will be installed (recommended). | `latest`              |
+| `github-token` | The GitHub token to use for querying the GitHub API.                                                          | `${{ github.token }}` |
 
 ### Outputs
 

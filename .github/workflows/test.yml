@@ -22,13 +22,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Install packages
-        run: npm ci
-
       - name: Test installing spacectl
-        run: node .
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ./
 
       - name: Test if spacectl works
         run: spacectl --version
