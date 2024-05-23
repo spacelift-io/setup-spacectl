@@ -42,6 +42,8 @@ jobs:
 
       - name: Point major version tag to the latest tag
         run: |
+          git fetch --tags
+
           git config --local user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
