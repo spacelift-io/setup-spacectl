@@ -21,7 +21,7 @@ jobs:
 
       - name: Bump version and push tag
         id: tag_version
-        uses: mathieudutour/github-tag-action@v6.1
+        uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: minor
@@ -32,3 +32,18 @@ jobs:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+
+      - name: Parse current major version
+        id: parse_major_version
+        run: |
+          majorVersion=$(echo ${{ steps.tag_version.outputs.new_tag }} | cut -d '.' -f 1)
+          echo "Current major version is $majorVersion"
+          echo "major_version=$majorVersion" >> $GITHUB_OUTPUT
+
+      - name: Point major version tag to the latest tag
+        run: |
+          git config --local user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git tag -f ${{ steps.parse_major_version.outputs.major_version }} ${{ steps.tag_version.outputs.new_tag }}
+          git push origin ${{ steps.parse_major_version.outputs.major_version }} --force
