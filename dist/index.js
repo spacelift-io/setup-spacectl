@@ -33143,7 +33143,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.installAndGetFolder = void 0;
+exports.installAndGetFolder = installAndGetFolder;
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
 const github = __importStar(__nccwpck_require__(5438));
@@ -33175,7 +33175,6 @@ function installAndGetFolder() {
         return extractedFolder;
     });
 }
-exports.installAndGetFolder = installAndGetFolder;
 /**
  * Saves the extracted binary's parent folder to the cache.
  */
