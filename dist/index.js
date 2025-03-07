@@ -32667,8 +32667,8 @@ function getLatestVersion() {
             repo: "spacectl",
         });
         const releaseList = releaseResponse.data;
-        if (!releaseList) {
-            const errMsg = "Could not find any releases for Spacectl";
+        if (!(releaseList === null || releaseList === void 0 ? void 0 : releaseList.length)) {
+            const errMsg = "Could not find any releases for Spacectl. GitHub outage perhaps? https://www.githubstatus.com/";
             core.setFailed(errMsg);
             throw new Error(errMsg);
         }
