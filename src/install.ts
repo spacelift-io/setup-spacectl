@@ -4,7 +4,9 @@ import * as github from "@actions/github";
 import os from "os";
 import path from "path";
 
-const octokit = github.getOctokit(core.getInput("github-token"));
+const octokit = github.getOctokit(core.getInput("github-token"), {
+  baseUrl: "https://api.github.com",
+});
 const downloadURL = "https://github.com/spacelift-io/spacectl/releases/download";
 
 /**
