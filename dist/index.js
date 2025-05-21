@@ -32587,7 +32587,9 @@ const tc = __importStar(__nccwpck_require__(3472));
 const github = __importStar(__nccwpck_require__(3228));
 const os_1 = __importDefault(__nccwpck_require__(857));
 const path_1 = __importDefault(__nccwpck_require__(6928));
-const octokit = github.getOctokit(core.getInput("github-token"));
+const octokit = github.getOctokit(core.getInput("github-token"), {
+    baseUrl: "https://api.github.com",
+});
 const downloadURL = "https://github.com/spacelift-io/spacectl/releases/download";
 /**
  * Downloads the Spacectl binary from GitHub.
