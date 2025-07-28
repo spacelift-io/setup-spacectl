@@ -36,7 +36,7 @@ steps:
 | Name           | Description                                                                                                   | Default               |
 | -------------- | ------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `version`      | Which version of `spacectl` to install. If not specified, the latest version will be installed (recommended). | `latest`              |
-| `github-token` | The GitHub token to use for querying the GitHub API.                                                          | `${{ github.token }}` |
+| `github-token` | The GitHub token to use for querying the GitHub API. Mandatory when using GitHub Enterprise.                  | `${{ github.token }}` |
 
 ### Outputs
 
