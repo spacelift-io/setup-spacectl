@@ -28,7 +28,7 @@ steps:
   - name: Install spacectl
     uses: spacelift-io/setup-spacectl@v1
     with:
-      version: v0.18.0
+      version: v1.15.0
 ```
 
 ### Inputs
