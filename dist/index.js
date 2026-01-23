@@ -36709,24 +36709,13 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(7484));
 const install_1 = __nccwpck_require__(232);
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const binaryFolder = yield (0, install_1.installAndGetFolder)();
-        core.addPath(binaryFolder);
-        core.info("Added spacectl to PATH: " + binaryFolder);
-    });
+async function run() {
+    const binaryFolder = await (0, install_1.installAndGetFolder)();
+    core.addPath(binaryFolder);
+    core.info("Added spacectl to PATH: " + binaryFolder);
 }
 run();
 
@@ -36771,15 +36760,6 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -36799,45 +36779,39 @@ const downloadURL = "https://github.com/spacelift-io/spacectl/releases/download"
  * It also caches it, so that subsequent runs of the action can use the cached version.
  * @returns The path of the extracted binary.
  */
-function installAndGetFolder() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const version = yield getVersion();
-        const arch = getArchitecture();
-        core.setOutput("version", version);
-        const cached = tc.find("spacectl", version, arch);
-        if (cached) {
-            core.info(`Found cached Spacectl at ${cached}`);
-            return cached;
-        }
-        const assetURL = yield getAssetURL(version, arch);
-        core.info(`Downloading Spacectl from ${assetURL}`);
-        const zipPath = yield tc.downloadTool(assetURL);
-        const extractedFolder = yield tc.extractZip(zipPath, path_1.default.join(os_1.default.homedir(), "spacectl"));
-        core.info(`Extracted Spacectl to ${extractedFolder}`);
-        yield saveToCache(extractedFolder, version, arch);
-        return extractedFolder;
-    });
+async function installAndGetFolder() {
+    const version = await getVersion();
+    const arch = getArchitecture();
+    core.setOutput("version", version);
+    const cached = tc.find("spacectl", version, arch);
+    if (cached) {
+        core.info(`Found cached Spacectl at ${cached}`);
+        return cached;
+    }
+    const assetURL = await getAssetURL(version, arch);
+    core.info(`Downloading Spacectl from ${assetURL}`);
+    const zipPath = await tc.downloadTool(assetURL);
+    const extractedFolder = await tc.extractZip(zipPath, path_1.default.join(os_1.default.homedir(), "spacectl"));
+    core.info(`Extracted Spacectl to ${extractedFolder}`);
+    await saveToCache(extractedFolder, version, arch);
+    return extractedFolder;
 }
 /**
  * Saves the extracted binary's parent folder to the cache.
  */
-function saveToCache(extractedFolder, version, arch) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const cachedPath = yield tc.cacheDir(extractedFolder, "spacectl", version, arch);
-        core.info(`Cached Spacectl to ${cachedPath}`);
-    });
+async function saveToCache(extractedFolder, version, arch) {
+    const cachedPath = await tc.cacheDir(extractedFolder, "spacectl", version, arch);
+    core.info(`Cached Spacectl to ${cachedPath}`);
 }
 /**
  * Returns the URL of the Spacectl zip file for the given version and architecture.
  * @returns The URL of the Spacectl zip file.
  * @example "https://github.com/spacelift-io/spacectl/releases/download/v0.12.0/spacectl_0.12.0_linux_arm64.zip"
  */
-function getAssetURL(version, arch) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const versionWithoutLeadingV = version.substring(1);
-        const platform = getPlatform();
-        return `${downloadURL}/${version}/spacectl_${versionWithoutLeadingV}_${platform}_${arch}.zip`;
-    });
+async function getAssetURL(version, arch) {
+    const versionWithoutLeadingV = version.substring(1);
+    const platform = getPlatform();
+    return `${downloadURL}/${version}/spacectl_${versionWithoutLeadingV}_${platform}_${arch}.zip`;
 }
 /**
  * Determines the version of Spacectl to download.
@@ -36845,20 +36819,18 @@ function getAssetURL(version, arch) {
  * @returns The version of Spacectl to download.
  * @example "v0.1.0"
  */
-function getVersion() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let version = core.getInput("version");
-        // If version is specified, let's prepend a "v" to it
-        if (version && version !== "latest" && version[0] !== "v") {
-            version = `v${version}`;
-        }
-        // If version is not specified, we default to the latest
-        if (!version || version === "latest") {
-            version = yield getLatestVersion();
-        }
-        core.info(`Installing version ${version} of Spacectl`);
-        return version;
-    });
+async function getVersion() {
+    let version = core.getInput("version");
+    // If version is specified, let's prepend a "v" to it
+    if (version && version !== "latest" && version[0] !== "v") {
+        version = `v${version}`;
+    }
+    // If version is not specified, we default to the latest
+    if (!version || version === "latest") {
+        version = await getLatestVersion();
+    }
+    core.info(`Installing version ${version} of Spacectl`);
+    return version;
 }
 /**
  * Gets the latest version of Spacectl from GitHub.
@@ -36866,21 +36838,19 @@ function getVersion() {
  * @returns The latest version of Spacectl with a "v" prefix.
  * @example "v0.1.0"
  */
-function getLatestVersion() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const releaseResponse = yield octokit.rest.repos.listReleases({
-            owner: "spacelift-io",
-            repo: "spacectl",
-        });
-        const releaseList = releaseResponse.data;
-        if (!(releaseList === null || releaseList === void 0 ? void 0 : releaseList.length)) {
-            const errMsg = "Could not find any releases for Spacectl. GitHub outage perhaps? https://www.githubstatus.com/";
-            core.setFailed(errMsg);
-            throw new Error(errMsg);
-        }
-        const filteredReleases = releaseList.filter((release) => !release.draft && !release.prerelease);
-        return filteredReleases[0].tag_name;
+async function getLatestVersion() {
+    const releaseResponse = await octokit.rest.repos.listReleases({
+        owner: "spacelift-io",
+        repo: "spacectl",
     });
+    const releaseList = releaseResponse.data;
+    if (!releaseList?.length) {
+        const errMsg = "Could not find any releases for Spacectl. GitHub outage perhaps? https://www.githubstatus.com/";
+        core.setFailed(errMsg);
+        throw new Error(errMsg);
+    }
+    const filteredReleases = releaseList.filter((release) => !release.draft && !release.prerelease);
+    return filteredReleases[0].tag_name;
 }
 /**
  * Copy-pasta of:

@@ -1,7 +1,7 @@
 name: dependabot
 
 on:
-  pull_request_target:
+  pull_request:
     branches:
       - main
 
@@ -21,8 +21,8 @@ jobs:
         id: generate
         uses: actions/create-github-app-token@v2
         with:
-          app-id: ${{ vars.DEPENDENCY_AUTOMATION_APP_ID }}
-          private-key: ${{ secrets.DEPENDENCY_AUTOMATION_APP_KEY }}
+          app-id: ${{ vars.AUTOMATION_APP_ID }}
+          private-key: ${{ secrets.AUTOMATION_APP_KEY }}
 
       - uses: actions/checkout@main
         with:
@@ -56,8 +56,8 @@ jobs:
         id: generate
         uses: actions/create-github-app-token@v2
         with:
-          app-id: ${{ vars.DEPENDENCY_AUTOMATION_APP_ID }}
-          private-key: ${{ secrets.DEPENDENCY_AUTOMATION_APP_KEY }}
+          app-id: ${{ vars.AUTOMATION_APP_ID }}
+          private-key: ${{ secrets.AUTOMATION_APP_KEY }}
 
       - name: Approve and auto-merge
         env:
