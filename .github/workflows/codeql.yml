@@ -13,6 +13,7 @@ jobs:
   codeql:
     name: 🔍 Code quality
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
 
     steps:
       - name: Checkout

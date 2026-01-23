@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:55"
+      timezone: Europe/Dublin
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "10:00"
+      timezone: Europe/Dublin
+    versioning-strategy: increase-if-necessary
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*"
