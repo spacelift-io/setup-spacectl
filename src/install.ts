@@ -129,7 +129,7 @@ function getPlatform(): string {
  * @example "amd64"
  */
 function getArchitecture(): string {
-  let arch = os.arch();
+  let arch: string = os.arch();
 
   switch (arch) {
     case "x64":
