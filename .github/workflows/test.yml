@@ -1,4 +1,4 @@
-name: build
+name: test
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
     name: 👷 Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:

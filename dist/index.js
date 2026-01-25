@@ -32953,18 +32953,16 @@ async function getVersion() {
  * @example "v0.1.0"
  */
 async function getLatestVersion() {
-    const releaseResponse = await octokit.rest.repos.listReleases({
+    const releaseResponse = await octokit.rest.repos.getLatestRelease({
         owner: "spacelift-io",
         repo: "spacectl",
     });
-    const releaseList = releaseResponse.data;
-    if (!releaseList?.length) {
+    if (!releaseResponse.data?.tag_name) {
         const errMsg = "Could not find any releases for Spacectl. GitHub outage perhaps? https://www.githubstatus.com/";
         core.setFailed(errMsg);
         throw new Error(errMsg);
     }
-    const filteredReleases = releaseList.filter((release) => !release.draft && !release.prerelease);
-    return filteredReleases[0].tag_name;
+    return releaseResponse.data.tag_name;
 }
 /**
  * Copy-pasta of:
