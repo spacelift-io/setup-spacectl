@@ -7,7 +7,7 @@
     "format": "prettier --write src/*.ts",
     "format:check": "prettier --check 'src/**/*.ts'",
     "lint": "eslint src/*.ts",
-    "build": "ncc build src/index.ts -o dist"
+    "build": "esbuild src/index.ts --bundle --platform=node --format=cjs --outfile=dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -26,13 +26,13 @@
   },
   "homepage": "https://github.com/spacelift-io/setup-spacectl#readme",
   "dependencies": {
-    "@actions/core": "^2.0",
-    "@actions/github": "^7.0.0",
-    "@actions/tool-cache": "^3.0"
+    "@actions/core": "^3.0",
+    "@actions/github": "^9.0.0",
+    "@actions/tool-cache": "^4.0"
   },
   "devDependencies": {
     "@types/node": "^25.0",
-    "@vercel/ncc": "^0",
+    "esbuild": "^0.25",
     "prettier": "^3.0",
     "typescript": "^5.0"
   }
