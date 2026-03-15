@@ -11,7 +11,7 @@ Note that the action queries the GitHub API to list the available releases of `s
 ```yaml
 steps:
   - name: Install spacectl
-    uses: spacelift-io/setup-spacectl@v1
+    uses: spacelift-io/setup-spacectl@v2
 
   - name: Deploy infrastructure
     env:
@@ -26,7 +26,7 @@ You can optionally provide a specific version:
 ```yaml
 steps:
   - name: Install spacectl
-    uses: spacelift-io/setup-spacectl@v1
+    uses: spacelift-io/setup-spacectl@v2
     with:
       version: v1.15.0
 ```
