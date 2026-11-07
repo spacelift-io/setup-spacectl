@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     name: 🔧 Rebuild TypeScript
-    if: github.actor == 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'javascript')
+    if: github.actor == 'dependabot[bot]' && startsWith(github.head_ref, 'dependabot/npm_and_yarn/')
     runs-on: ubuntu-latest
 
     steps:
@@ -43,7 +43,7 @@ jobs:
           git diff --staged --quiet || git commit -m "chore: rebuild dist"
           git push
 
-  # Github Action bump PRs skip the TypeScript rebuild since they don't have the 'javascript' label
+  # Github Action bump PRs skip the TypeScript rebuild since they aren't on a 'dependabot/npm_and_yarn/' branch
   # hence the 'always()' condition - to ensure this job runs for those PRs, too.
   auto-merge:
     name: 🤖 Approve and auto-merge
